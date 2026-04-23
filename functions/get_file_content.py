@@ -1,7 +1,7 @@
 import os
 
 from functions.config import MAX_CHARS
-
+from google.genai import types
 
 def get_file_content(working_directory, file_path):
     working_directory = os.path.abspath(working_directory)
@@ -21,4 +21,17 @@ def get_file_content(working_directory, file_path):
     except Exception as e:
         return f"Error reading file: {e}"
 
-    
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Reads the content of a specified file relative to the working directory. If the file is larger than a certain size, it will be truncated and a message will indicate that it has been truncated.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="Path of the file to read, relative to the working directory.",
+            ),
+        },
+        required=["file_path"],
+    ),
+)
